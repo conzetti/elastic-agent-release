@@ -1,6 +1,6 @@
 Elastic Agent BOSH Release
 ===========================
-💡 _A deployment mechanism for Elastic Agent on BOSH-deployed virtual machines_
+💡 _A deployment mechanism for Elastic Agent on BOSH managed virtual machines_
 
 ## 🎬 Getting Started
 
