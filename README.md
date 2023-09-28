@@ -60,7 +60,7 @@ addons:
 
 * Add the updated agent to the BOSH blob store
   ```console
-  bosh add-blob ~/Downloads/FIXME
+  bosh add-blob ~/Downloads/elastic-agent-8.10.2-linux-x86_64.tar.gz elastic-agent-8.10.2-linux-x86_64.tar.gz
   ```
 
 * Amend the following files with the updated agent version

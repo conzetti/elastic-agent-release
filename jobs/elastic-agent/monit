@@ -1,0 +1,5 @@
+
+check process elastic-agent matching "elastic-agent"
+  start program "/var/vcap/jobs/elastic-agent/bin/elastic-agent_ctl.sh start" with timeout 500 seconds
+  stop program "pkill elastic-agent"
+  group vcap

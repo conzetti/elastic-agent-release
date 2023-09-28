@@ -1,0 +1,16 @@
+---
+name: elastic-agent
+
+templates:
+  elastic-agent_ctl: bin/elastic-agent_ctl
+  pre-start.erb: bin/pre-start
+
+packages: []
+
+properties:
+  agent.monitoring.http.host:
+    description: Monitoring address to listen on
+    default: "127.0.0.1"
+  agent.grpc.address:
+    description: gRPC address to listen on
+    default: "127.0.0.1"
