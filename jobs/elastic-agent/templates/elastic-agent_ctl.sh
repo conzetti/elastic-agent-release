@@ -11,18 +11,12 @@ JOB_DIR="/var/vcap/jobs/${PROCESS_NAME}"
 PKG_DIR="/var/vcap/packages/${PROCESS_NAME}"
 
 function start_logging() {
-    exec > >(prepend_datetime >> $LOG_DIR/${SCRIPT_NAME}.stdout.log)
-    exec 2> >(prepend_datetime >> $LOG_DIR/${SCRIPT_NAME}.stderr.log)
+    exec > >(prepend_datetime >> "${LOG_DIR}/${SCRIPT_NAME}.stdout.log")
+    exec 2> >(prepend_datetime >> "${LOG_DIR}/${SCRIPT_NAME}.stderr.log")
 }
 
 function prepend_datetime() {
-    LOG_FORMAT=rfc3339
-
-    if [ "$LOG_FORMAT" == "deprecated" ]; then
-        awk -W interactive '{ system("echo -n [$(date +\"%Y-%m-%d %H:%M:%S%z\")]"); print " " $0 }'
-    else
-        perl -ne 'BEGIN { use Time::HiRes "time"; use POSIX "strftime"; STDOUT->autoflush(1) }; my $t = time; my $fsec = sprintf ".%09d", ($t-int($t))*1000000000; my $time = strftime("[%Y-%m-%dT%H:%M:%S".$fsec."Z]", localtime $t); print("$time $_")'
-    fi
+    perl -ne 'BEGIN { use Time::HiRes "time"; use POSIX "strftime"; STDOUT->autoflush(1) }; my $t = time; my $fsec = sprintf ".%09d", ($t-int($t))*1000000000; my $time = strftime("[%Y-%m-%dT%H:%M:%S".$fsec."Z]", localtime $t); print("$time $_")'
 }
 
 function pid_exists() {
@@ -30,16 +24,15 @@ function pid_exists() {
 }
 
 function create_directories_and_chown_to_vcap() {
-    mkdir -p "${LOG_DIR}"
+    mkdir -p "${LOG_DIR}" "${RUN_DIR}"
     chown -R vcap:vcap "${LOG_DIR}"
-    mkdir -p "${RUN_DIR}"
     chown -R vcap:vcap "${RUN_DIR}"
 }
 
 function start() {
-    if [ -e "${PIDFILE}" ]; then
+    if [[ -e "${PIDFILE}" ]]; then
         pid=$(head -1 "${PIDFILE}")
-        if pid_exists "$pid"; then
+        if pid_exists "${pid}"; then
             return 0
         fi
     fi
@@ -59,7 +52,23 @@ function start() {
 }
 
 function stop() {
-    /usr/bin/pkill -9 elastic-agent
+    local pid
+
+    if [[ -e "${PIDFILE}" ]]; then
+        pid=$(head -1 "${PIDFILE}")
+    else
+        exit 0
+    fi
+
+    if [[ ! -z "${pid}" ]] && pid_exists "${pid}"; then
+        kill -15 "${pid}" || true
+    fi
+
+    if [[ -e "/proc/${pid}" ]]; then
+        kill -9 "${pid}" || true
+    fi
+
+    rm -f "${PIDFILE}"
 }
 
 function main() {
