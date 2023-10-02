@@ -1,5 +1,5 @@
 check process elastic-agent
   with pidfile /var/vcap/sys/run/elastic-agent/elastic-agent.pid
-  start program "/var/vcap/jobs/elastic-agent/bin/elastic-agent_ctl.sh start" with timeout 500 seconds
-  stop program "/var/vcap/jobs/elastic-agent/bin/elastic-agent_ctl.sh stop"
+  start program "/var/vcap/jobs/elastic-agent/bin/elastic-agent_ctl start" with timeout 500 seconds
+  stop program "/var/vcap/jobs/elastic-agent/bin/elastic-agent_ctl stop"
   group vcap
