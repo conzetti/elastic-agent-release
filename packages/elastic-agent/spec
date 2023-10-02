@@ -1,0 +1,7 @@
+---
+name: elastic-agent
+
+dependencies: []
+
+files:
+- elastic-agent-8.10.2-linux-x86_64.tar.gz # From https://artifacts.elastic.co/downloads/beats/elastic-agent/elastic-agent-8.10.2-linux-x86_64.tar.gz

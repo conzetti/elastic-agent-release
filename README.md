@@ -40,30 +40,34 @@ addons:
 
 * Print out the current ["blobs" ](https://bosh.io/docs/release-blobs/)
   ```console
-  ➜  bosh blobs
-  FIXME
+➜  bosh blobs
+Path                                      Size     Blobstore ID                          Digest
+elastic-agent-8.10.2-linux-x86_64.tar.gz  535 MiB  665008fd-0590-4036-4cc2-81d445882c14  sha256:67f50acbff3a3e03dc0354d443fdb154c4d3f722826218a4d7d7250b8735361c
 
-  1 blobs
+1 blobs
 
-  Succeeded
+Succeeded
   ```
 
 * Purge the current blob for the Elastic Agent
   ```console
-  bosh remove-blob FIXME
+  bosh remove-blob elastic-agent-8.10.2-linux-x86_64.tar.gz
   ```
 
-* Gather the _latest_ Elastic Agent from https://www.tenable.com/downloads/nessus-agents
+* Gather the _latest_ Elastic Agent from https://www.elastic.co/downloads/elastic-agent
 
 * Add the updated agent to the BOSH blob store
   ```console
   bosh add-blob ~/Downloads/elastic-agent-8.10.2-linux-x86_64.tar.gz elastic-agent-8.10.2-linux-x86_64.tar.gz
   ```
 
-* Amend the following files with the updated agent version
+* Optionally upload the blobs to S3 (not required for offline or local development)
+```console
+bosh upload-blobs
+```
+
+* Amend the following files with the updated agent filename
   ```
-  jobs/elastic-agent/templates/pre-start.sh
-  packages/elastic-agent/packaging
   packages/elastic-agent/spec
   ```
 
@@ -71,7 +75,7 @@ addons:
   ```bash
   bosh create-release \
     --name elastic-agent-release \
-    --version <CURRENT_RELEASE> \
+    --version 0.0.1 \
     --tarball /tmp/release.tgz \
     --[force | final]
   ```

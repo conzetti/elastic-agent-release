@@ -3,9 +3,10 @@ name: elastic-agent
 
 templates:
   elastic-agent_ctl: bin/elastic-agent_ctl
-  pre-start.erb: bin/pre-start
+  pre-start.erb: bin/pre-start.erb
 
-packages: []
+packages:
+- elastic-agent
 
 properties:
   agent.monitoring.http.host:
@@ -14,3 +15,10 @@ properties:
   agent.grpc.address:
     description: gRPC address to listen on
     default: "127.0.0.1"
+  fleet:
+    enrollment-token:
+      description: Enrollment token used to enroll Agent into Fleet
+    url:
+      description: URL to enroll Agent into Fleet
+    certificate-authorities:
+      description: Comma separated list of root certificate for server verifications

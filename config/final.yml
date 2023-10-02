@@ -1,1 +1,8 @@
-name: elastic-agent
+---
+name: elastic-agent-release
+blobstore:
+  provider: s3
+  options:
+    bucket_name: elastic-agent-release
+    region: us-gov-east-1
+    host: s3.us-gov-east-1.amazonaws.com

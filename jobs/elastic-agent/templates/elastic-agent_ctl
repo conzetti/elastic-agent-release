@@ -9,6 +9,8 @@ LOG_DIR="/var/vcap/sys/log/${PROCESS_NAME}"
 SCRIPT_NAME="${PROCESS_NAME}_ctl"
 JOB_DIR="/var/vcap/jobs/${PROCESS_NAME}"
 PKG_DIR="/var/vcap/packages/${PROCESS_NAME}"
+DOWNLOADS_DIR="${PKG_DIR}/downloads"
+CONFIG_DIR="${JOB_DIR}/config"
 
 function start_logging() {
     exec > >(prepend_datetime >> "${LOG_DIR}/${SCRIPT_NAME}.stdout.log")
@@ -24,9 +26,10 @@ function pid_exists() {
 }
 
 function create_directories_and_chown_to_vcap() {
-    mkdir -p "${LOG_DIR}" "${RUN_DIR}"
+    mkdir -p "${LOG_DIR}" "${RUN_DIR}" "${DOWNLOADS_DIR}"
     chown -R vcap:vcap "${LOG_DIR}"
     chown -R vcap:vcap "${RUN_DIR}"
+    chown -R vcap:vcap "${DOWNLOADS_DIR}"
 }
 
 function start() {
@@ -37,13 +40,14 @@ function start() {
         fi
     fi
 
-    setcap cap_net_bind_service=+ep "${PKG_DIR}/bin/${PROCESS_NAME}"
+    setcap cap_net_bind_service=+ep "${PKG_DIR}/${PROCESS_NAME}"
     ulimit -n 65536
 
     pushd "${JOB_DIR}"
     chpst -u vcap:vcap \
-    "${PKG_DIR}/bin/${PROCESS_NAME}" \
-    --config "${JOB_DIR}/config/config.json" \
+    "${PKG_DIR}/bin/${PROCESS_NAME}" run\
+    --path.config "${CONFIG_DIR}" \
+    --path.downloads "${DOWNLOADS_DIR}" \
     1>> "${LOG_DIR}/${PROCESS_NAME}.stdout.log" \
     2>> "${LOG_DIR}/${PROCESS_NAME}.stderr.log" &
     popd
