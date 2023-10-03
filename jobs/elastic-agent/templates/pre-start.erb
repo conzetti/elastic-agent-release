@@ -3,6 +3,7 @@
 LOG_DIR=/var/vcap/sys/log/elastic-agent
 SCRIPT_NAME=pre-start
 JOB_DIR=/var/vcap/jobs/elastic-agent
+CONFIG_DIR="${JOB_DIR}/config"
 
 function start_logging() {
   exec > >(prepend_datetime >> "${LOG_DIR}/${SCRIPT_NAME}.stdout.log")
@@ -20,10 +21,23 @@ function enroll() {
   local enrollment-token=<%= p("fleet.enrollment-token") %>
   local certificate-authorities
 
+  if [[ -f "${CONFIG_DIR}/fleet.enc" ]]; then
+    echo "INFO: Elastic Agent already enrolled. Skipping enrollment."
+    return 0
+  fi
+
   ./elastic-agent enroll \
-  --enrollment-token <%= p("fleet.enrollment-token") %> \
   --url <%= p("fleet.url") %> \
-  <% if_p("fleet.certificate-authorities") do |prop| %>
-  --certificate-authorities <%= v %>
+  --enrollment-token <%= p("fleet.enrollment-token") %> \
+  <% if_p("fleet.certificate-authorities") do |v| %>
+  --certificate-authorities <%= v %> \
   <% end %>
+  --force
 }
+
+function main() {
+    start_logging
+    enroll
+}
+
+main

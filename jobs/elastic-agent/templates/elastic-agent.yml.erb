@@ -1,13 +1,10 @@
 ---
 fleet:
+  enabled: true
   agent.grpc:
-#   # listen address for the GRPC server that spawned processes connect back to.
-#   address: 127.0.0.1
-#   # port for the GRPC server that spawned processes connect back to.
-#   port: 6789
-#   # max_message_size limits the message size in agent internal communication
-#   # default is 100MB
-#   max_message_size: 104857600
+    address: <%= "agent.grpc.address" %>
+  http:
+      host:<%= "agent.monitoring.http.host" %>
 
 # agent.retry:
 #   # Enabled determines whether retry is possible. Default is false.
@@ -43,16 +40,6 @@ fleet:
 #   # The name of the output to use for monitoring data.
 #   use_output: monitoring
 #   # exposes agent metrics using http, by default sockets and named pipes are used
-#   http:
-#       # enables http endpoint
-#       enabled: false
-#       # The HTTP endpoint will bind to this hostname, IP address, unix socket or named pipe.
-#       # When using IP addresses, it is recommended to only use localhost.
-#       host: localhost
-#       # Port on which the HTTP endpoint will bind. Default is 0 meaning feature is disabled.
-#       port: 6791
-#       # Metrics buffer endpoint
-#       buffer.enabled: false
 #   # Configuration for the diagnostics action handler
 #   diagnostics:
 #       # Rate limit for the action handler. Does not affect diagnostics collected through the CLI.

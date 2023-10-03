@@ -32,6 +32,10 @@ function create_directories_and_chown_to_vcap() {
     chown -R vcap:vcap "${DOWNLOADS_DIR}"
 }
 
+function copy_agent_config() {
+    copy "${CONFIG_DIR}/elastic-agent.yml.bosh_managed" "${CONFIG_DIR}/elastic-agent.yml"
+}
+
 function start() {
     if [[ -e "${PIDFILE}" ]]; then
         pid=$(head -1 "${PIDFILE}")
@@ -40,6 +44,7 @@ function start() {
         fi
     fi
 
+    copy_agent_config
     setcap cap_net_bind_service=+ep "${PKG_DIR}/${PROCESS_NAME}"
     ulimit -n 65536
 
@@ -78,16 +83,13 @@ function stop() {
 function main() {
     create_directories_and_chown_to_vcap
     start_logging
-
     case ${1} in
         start)
             start
         ;;
-
         stop)
             stop
         ;;
-
         *)
             echo "Usage: ${0} {start|stop}"
         ;;
