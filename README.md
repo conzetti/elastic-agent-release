@@ -40,13 +40,13 @@ addons:
 
 * Print out the current ["blobs" ](https://bosh.io/docs/release-blobs/)
   ```console
-➜  bosh blobs
-Path                                      Size     Blobstore ID                          Digest
-elastic-agent-8.10.2-linux-x86_64.tar.gz  535 MiB  665008fd-0590-4036-4cc2-81d445882c14  sha256:67f50acbff3a3e03dc0354d443fdb154c4d3f722826218a4d7d7250b8735361c
+  ➜  bosh blobs
+  Path                                      Size     Blobstore ID                          Digest
+  elastic-agent-8.10.2-linux-x86_64.tar.gz  535 MiB  665008fd-0590-4036-4cc2-81d445882c14  sha256:67f50acbff3a3e03dc0354d443fdb154c4d3f722826218a4d7d7250b8735361c
 
-1 blobs
+  1 blobs
 
-Succeeded
+  Succeeded
   ```
 
 * Purge the current blob for the Elastic Agent
