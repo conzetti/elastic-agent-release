@@ -22,4 +22,5 @@ properties:
     url:
       description: URL to enroll Agent into Fleet
     certificate-authorities:
-      description: Comma separated list of root certificate for server verifications
+      description: Comma separated list of root certificate paths for server verifications
+      default: /etc/ssl/certs/ca-certificates.crt
