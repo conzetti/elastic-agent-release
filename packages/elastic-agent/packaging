@@ -1,4 +1,5 @@
 set -eux
 
 ARCHIVE="$(find . -type f -name '*elastic-agent-*-linux-x86_64.tar.gz')"
+mkdir -pv "${BOSH_INSTALL_TARGET}/bin"
 tar -xzvf "${ARCHIVE}" --directory "${BOSH_INSTALL_TARGET}/bin" --strip-components 1
