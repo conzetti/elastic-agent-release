@@ -79,7 +79,7 @@ bosh upload-blobs
   ```bash
   bosh create-release \
     --name elastic-agent-release \
-    --version 0.0.1 \
+    --version 0.0.1-alpha \
     --tarball /tmp/release.tgz \
     --[force | final]
   ```
