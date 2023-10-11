@@ -21,6 +21,10 @@ addons:
   jobs:
   - name: elastic-agent
     release: elastic-agent-release
+    properties:
+      fleet:
+        enrollment-token: Zm9vOmJhego=
+        url: https://foobaz.fleet.us-east4.gcp.elastic-cloud.com
   include:
     stemcell:
     - os: ubuntu-trusty
