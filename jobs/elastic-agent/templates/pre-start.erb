@@ -29,7 +29,9 @@ function enroll() {
   ./elastic-agent enroll \
   --url <%= p("fleet.url") %> \
   --enrollment-token <%= p("fleet.enrollment-token") %> \
-  --certificate-authorities <%= p("fleet.certificate-authorities") %> \
+<% if_p("fleet.certificate-authorities") do |v| %>
+  --certificate-authorities <%= v %> \
+<% end %>
   --force
 }
 

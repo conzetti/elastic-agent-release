@@ -5,6 +5,3 @@ fleet:
     address: <%= "agent.grpc.address" %>
   http:
       host:<%= "agent.monitoring.http.host" %>
-<% if_p("fleet.certificate-authorities") do |v| %>
---certificate-authorities <%= v %> \
-<% end %>
