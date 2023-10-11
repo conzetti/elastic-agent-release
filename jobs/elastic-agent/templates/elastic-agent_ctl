@@ -45,7 +45,7 @@ function start() {
     fi
 
     copy_agent_config
-    setcap cap_net_bind_service=+ep "${PKG_DIR}/${PROCESS_NAME}"
+    setcap cap_net_bind_service=+ep "${PKG_DIR}/bin/${PROCESS_NAME}"
     ulimit -n 65536
 
     pushd "${JOB_DIR}"
