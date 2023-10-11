@@ -1,7 +1,8 @@
 ---
 fleet:
   enabled: true
-  agent.grpc:
-    address: <%= p('agent.grpc.address') %>
+agent.grpc:
+  address: <%= p('agent.grpc.address') %>
+agent.monitoring:
   http:
-      host: <%= p('agent.monitoring.http.host') %>
+    host: <%= p('agent.monitoring.http.host') %>
