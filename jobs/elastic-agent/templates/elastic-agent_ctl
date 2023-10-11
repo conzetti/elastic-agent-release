@@ -33,7 +33,7 @@ function create_directories_and_chown_to_vcap() {
 }
 
 function copy_agent_config() {
-    copy "${CONFIG_DIR}/elastic-agent.yml.bosh_managed" "${CONFIG_DIR}/elastic-agent.yml"
+    cp "${CONFIG_DIR}/elastic-agent.yml.bosh_managed" "${CONFIG_DIR}/elastic-agent.yml"
 }
 
 function start() {
