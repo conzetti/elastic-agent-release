@@ -86,9 +86,10 @@ function stop() {
 }
 
 function main() {
+    local operation="${1:-null}"
     create_directories_and_chown_to_vcap
     start_logging
-    case ${1} in
+    case ${operation} in
         start)
             start
         ;;
