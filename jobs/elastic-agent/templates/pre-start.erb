@@ -1,9 +1,11 @@
 #!/bin/bash -eux
 
 # Globals
-LOG_DIR=/var/vcap/sys/log/elastic-agent
+PROCESS_NAME=elastic-agent
+PKG_DIR="/var/vcap/packages/${PROCESS_NAME}"
+LOG_DIR="/var/vcap/sys/log/${PROCESS_NAME}"
 SCRIPT_NAME=pre-start
-JOB_DIR=/var/vcap/jobs/elastic-agent
+JOB_DIR="/var/vcap/jobs/${PROCESS_NAME}"
 CONFIG_DIR="${JOB_DIR}/config"
 
 function start_logging() {
