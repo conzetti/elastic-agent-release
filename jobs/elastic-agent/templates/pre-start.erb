@@ -20,6 +20,7 @@ function prepend_datetime() {
 function enroll() {
     local url=<%= p("fleet.url") %>
     local enrollment_token=<%= p("fleet.enrollment-token") %>
+    local certificate_authorities=<%= p("fleet.certificate-authorities") %>
 
     if [[ -f "${CONFIG_DIR}/fleet.enc" ]]; then
         echo "INFO: Elastic Agent already enrolled. Skipping enrollment."
@@ -30,7 +31,8 @@ function enroll() {
     "${PKG_DIR}/bin/${PROCESS_NAME}" enroll \
     --url "${url}" \
     --enrollment-token "${enrollment_token}" \
-    <% if_p("fleet.certificate-authorities") do |v| %> --certificate-authorities <%= v %> \<% end %>
+    --certificate-authorities "${certificate_authorities}" \
+    --path.config "${CONFIG_DIR}" \
     --force
 }
 
