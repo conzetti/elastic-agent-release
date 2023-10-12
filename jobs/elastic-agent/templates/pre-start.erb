@@ -1,38 +1,35 @@
-#!/bin/bash
+#!/bin/bash -eux
 
+# Globals
 LOG_DIR=/var/vcap/sys/log/elastic-agent
 SCRIPT_NAME=pre-start
 JOB_DIR=/var/vcap/jobs/elastic-agent
 CONFIG_DIR="${JOB_DIR}/config"
 
 function start_logging() {
-  exec > >(prepend_datetime >> "${LOG_DIR}/${SCRIPT_NAME}.stdout.log")
-  exec 2> >(prepend_datetime >> "${LOG_DIR}/${SCRIPT_NAME}.stderr.log")
+    exec > >(prepend_datetime >> "${LOG_DIR}/${SCRIPT_NAME}.stdout.log")
+    exec 2> >(prepend_datetime >> "${LOG_DIR}/${SCRIPT_NAME}.stderr.log")
 }
 
 function prepend_datetime() {
     perl -ne 'BEGIN { use Time::HiRes "time"; use POSIX "strftime"; STDOUT->autoflush(1) }; my $t = time; my $fsec = sprintf ".%09d", ($t-int($t))*1000000000; my $time = strftime("[%Y-%m-%dT%H:%M:%S".$fsec."Z]", localtime $t); print("$time $_")'
 }
 
-start_logging
-
 function enroll() {
-  local url=<%= p("fleet.url") %>
-  local enrollment-token=<%= p("fleet.enrollment-token") %>
-  local certificate-authorities
+    local url=<%= p("fleet.url") %>
+    local enrollment_token=<%= p("fleet.enrollment-token") %>
 
-  if [[ -f "${CONFIG_DIR}/fleet.enc" ]]; then
-    echo "INFO: Elastic Agent already enrolled. Skipping enrollment."
-    return 0
-  fi
+    if [[ -f "${CONFIG_DIR}/fleet.enc" ]]; then
+        echo "INFO: Elastic Agent already enrolled. Skipping enrollment."
+        return 0
+    fi
 
-  ./elastic-agent enroll \
-  --url <%= p("fleet.url") %> \
-  --enrollment-token <%= p("fleet.enrollment-token") %> \
-<% if_p("fleet.certificate-authorities") do |v| %>
-  --certificate-authorities <%= v %> \
-<% end %>
-  --force
+    pushd "${JOB_DIR}"
+    "${PKG_DIR}/bin/${PROCESS_NAME}" enroll \
+    --url "${url}" \
+    --enrollment-token "${enrollment_token}" \
+    <% if_p("fleet.certificate-authorities") do |v| %> --certificate-authorities <%= v %> \<% end %>
+    --force
 }
 
 function main() {
