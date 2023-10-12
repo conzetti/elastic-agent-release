@@ -28,15 +28,15 @@ function pid_exists() {
 }
 
 function create_directories_and_chown_to_vcap() {
-    mkdir -p "${LOG_DIR}" "${RUN_DIR}" "${DOWNLOADS_DIR}" "${DATA_DIR}"
-    chown -R vcap:vcap "${LOG_DIR}"
-    chown -R vcap:vcap "${RUN_DIR}"
-    chown -R vcap:vcap "${DOWNLOADS_DIR}"
-    chown -R vcap:vcap "${DATA_DIR}"
+    mkdir -pv "${LOG_DIR}" "${RUN_DIR}" "${DOWNLOADS_DIR}" "${DATA_DIR}"
+    chown -Rv vcap:vcap "${LOG_DIR}"
+    chown -Rv vcap:vcap "${RUN_DIR}"
+    chown -Rv vcap:vcap "${DOWNLOADS_DIR}"
+    chown -Rv vcap:vcap "${DATA_DIR}"
 }
 
 function copy_agent_config() {
-    cp "${CONFIG_DIR}/elastic-agent.yml.bosh_managed" "${CONFIG_DIR}/elastic-agent.yml"
+    cp -v "${CONFIG_DIR}/elastic-agent.yml.bosh_managed" "${CONFIG_DIR}/elastic-agent.yml"
 }
 
 function start() {
@@ -82,7 +82,7 @@ function stop() {
         kill -9 "${pid}" || true
     fi
 
-    rm -f "${PIDFILE}"
+    rm -fv "${PIDFILE}"
 }
 
 function main() {
