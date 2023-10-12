@@ -12,6 +12,7 @@ JOB_DIR="/var/vcap/jobs/${PROCESS_NAME}"
 PKG_DIR="/var/vcap/packages/${PROCESS_NAME}"
 DOWNLOADS_DIR="${PKG_DIR}/downloads"
 CONFIG_DIR="${JOB_DIR}/config"
+DATA_DIR="${JOB_DIR}/data"
 
 function start_logging() {
     exec > >(prepend_datetime >> "${LOG_DIR}/${SCRIPT_NAME}.stdout.log")
@@ -27,10 +28,11 @@ function pid_exists() {
 }
 
 function create_directories_and_chown_to_vcap() {
-    mkdir -p "${LOG_DIR}" "${RUN_DIR}" "${DOWNLOADS_DIR}"
+    mkdir -p "${LOG_DIR}" "${RUN_DIR}" "${DOWNLOADS_DIR}" "${DATA_DIR}"
     chown -R vcap:vcap "${LOG_DIR}"
     chown -R vcap:vcap "${RUN_DIR}"
     chown -R vcap:vcap "${DOWNLOADS_DIR}"
+    chown -R vcap:vcap "${DATA_DIR}"
 }
 
 function copy_agent_config() {
