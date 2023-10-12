@@ -55,7 +55,6 @@ function start() {
     ulimit -n 65536
 
     pushd "${JOB_DIR}"
-    chpst -u vcap:vcap \
     "${PKG_DIR}/bin/${PROCESS_NAME}" run\
     --path.config "${CONFIG_DIR}" \
     --path.home "${JOB_DIR}" \
