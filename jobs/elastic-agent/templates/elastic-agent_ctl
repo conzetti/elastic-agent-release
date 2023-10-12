@@ -33,10 +33,12 @@ function create_directories_and_chown_to_vcap() {
     chown -Rv vcap:vcap "${RUN_DIR}"
     chown -Rv vcap:vcap "${DOWNLOADS_DIR}"
     chown -Rv vcap:vcap "${DATA_DIR}"
+    chown -Rv vcap:vcap "${CONFIG_DIR}"
 }
 
 function copy_agent_config() {
     cp -v "${CONFIG_DIR}/elastic-agent.yml.bosh_managed" "${CONFIG_DIR}/elastic-agent.yml"
+    chown -v vcap:vcap "${CONFIG_DIR}/elastic-agent.yml"
 }
 
 function start() {
