@@ -15,4 +15,6 @@ builds:
     version: 0.0.5-alpha
   8f4c727f-9d25-4b49-519c-726cae43635c:
     version: 0.0.6-alpha
+  f2649297-d390-4301-67f1-63f10c7926f9:
+    version: 0.0.9-alpha
 format-version: "2"
