@@ -2,6 +2,7 @@
 
 set -o pipefail
 
+# Globals
 PROCESS_NAME=elastic-agent
 RUN_DIR="/var/vcap/sys/run/${PROCESS_NAME}"
 PIDFILE="${RUN_DIR}/${PROCESS_NAME}.pid"
@@ -45,7 +46,8 @@ function start() {
     fi
 
     copy_agent_config
-    setcap cap_net_bind_service=+ep "${PKG_DIR}/bin/${PROCESS_NAME}"
+    process_path=$(readlink -f "${PKG_DIR}/bin/${PROCESS_NAME}")
+    setcap cap_net_bind_service=+ep "${process_path}"
     ulimit -n 65536
 
     pushd "${JOB_DIR}"
