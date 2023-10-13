@@ -17,6 +17,11 @@ function prepend_datetime() {
     perl -ne 'BEGIN { use Time::HiRes "time"; use POSIX "strftime"; STDOUT->autoflush(1) }; my $t = time; my $fsec = sprintf ".%09d", ($t-int($t))*1000000000; my $time = strftime("[%Y-%m-%dT%H:%M:%S".$fsec."Z]", localtime $t); print("$time $_")'
 }
 
+function copy_agent_config() {
+    cp -v "${CONFIG_DIR}/elastic-agent.yml.bosh_managed" "${CONFIG_DIR}/elastic-agent.yml"
+    chown -v vcap:vcap "${CONFIG_DIR}/elastic-agent.yml"
+}
+
 function enroll() {
     local url=<%= p("fleet.url") %>
     local enrollment_token=<%= p("fleet.enrollment-token") %>
@@ -38,6 +43,7 @@ function enroll() {
 
 function main() {
     start_logging
+    copy_agent_config
     enroll
 }
 
