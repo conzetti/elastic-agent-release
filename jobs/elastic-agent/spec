@@ -5,7 +5,6 @@ templates:
   elastic-agent_ctl: bin/elastic-agent_ctl
   pre-start.erb: bin/pre-start
   elastic-agent.yml.erb: config/elastic-agent.yml.bosh_managed
-  elastic-agent.yml.erb: config/elastic-agent.yml
 
 packages:
 - elastic-agent
