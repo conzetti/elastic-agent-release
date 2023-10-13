@@ -4,7 +4,7 @@ Elastic Agent BOSH Release
 
 ## 🎬 Getting Started
 
-Fork this repo or download one of the [prebuilt releases](releases/latest).
+Fork this repo or download one of the [prebuilt releases](https://github.com/conzetti/elastic-agent-release/releases).
 
 **NOTE**: This is intended to be used as a BOSH [addon](https://bosh.io/docs/runtime-config/#update)
 
@@ -14,7 +14,7 @@ _Example runtime configuration YAML to run on a variety of Ubuntu Linux stemcell
 ```yml
 releases:
 - name: elastic-agent-release
-  version: 0.0.1-alpha
+  version: 0.0.21-alpha
 
 addons:
 - name: elastic-agent-release
@@ -79,7 +79,7 @@ bosh upload-blobs
   ```bash
   bosh create-release \
     --name elastic-agent-release \
-    --version 0.0.1-alpha \
+    --version 0.0.21-alpha \
     --tarball /tmp/release.tgz \
     --[force | final]
   ```
