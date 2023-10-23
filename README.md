@@ -58,7 +58,12 @@ addons:
   bosh remove-blob elastic-agent-8.10.2-linux-x86_64.tar.gz
   ```
 
-* Gather the _latest_ Elastic Agent from https://www.elastic.co/downloads/elastic-agent
+* Gather the _latest_ Elastic Agent via one of the following methods 
+  * Manually download from https://www.elastic.co/downloads/elastic-agent
+  * Using `wget` && `jq`
+    > ```wget https://artifacts.elastic.co/downloads/beats/elastic-agent/elastic-agent-$(wget -qO - https://api.github.com/repos/elastic/elastic-agent/tags\?per_page\=1 | jq -r '.[].name | capture("(?<v>[[:digit:].]+)").v')-linux-x86_64.tar.gz```
+  * Using `curl` && `jq`
+    > ```curl https://artifacts.elastic.co/downloads/beats/elastic-agent/elastic-agent-$(curl -s GET https://api.github.com/repos/elastic/elastic-agent/tags\?per_page\=1 | jq -r '.[].name| capture("(?<v>[[:digit:].]+)").v')-linux-x86_64.tar.gz --output elastic-agent-$(curl -s GET https://api.github.com/repos/elastic/elastic-agent/tags\?per_page\=1 | jq -r '.[].name | capture("(?<v>[[:digit:].]+)").v')-linux-x86_64.tar.gz```
 
 * Add the updated agent to the BOSH blob store
   ```console
