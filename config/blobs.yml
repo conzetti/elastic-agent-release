@@ -1,4 +1,4 @@
-elastic-agent-8.10.2-linux-x86_64.tar.gz:
-  size: 561246611
-  object_id: 665008fd-0590-4036-4cc2-81d445882c14
-  sha: sha256:67f50acbff3a3e03dc0354d443fdb154c4d3f722826218a4d7d7250b8735361c
+elastic-agent-8.10.4-linux-x86_64.tar.gz:
+  size: 561032662
+  object_id: 8c37c4fb-fe2c-4b08-7f63-3846b10a175f
+  sha: sha256:c789cc3b68453c5c45992ec86b9c2624acd13346a726e20a34064dcd223e470b

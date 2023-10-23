@@ -1,0 +1,21 @@
+name: elastic-agent-release
+version: 0.0.22-alpha
+commit_hash: 3aec5f0
+uncommitted_changes: true
+jobs:
+- name: elastic-agent
+  version: 89c01547ba91396fbd53cabe2ffad99543f81ef8d8a1aa2179c85afd19ca9338
+  fingerprint: 89c01547ba91396fbd53cabe2ffad99543f81ef8d8a1aa2179c85afd19ca9338
+  sha1: sha256:d84c93885005849ab1bfa6c166106bc61ec97ae468768cb0ece2cafd90f76653
+  packages:
+  - elastic-agent
+packages:
+- name: elastic-agent
+  version: 860d670926d712b026b37922f5d6f7dc20957537acef1fe6bf5971e0e24547b1
+  fingerprint: 860d670926d712b026b37922f5d6f7dc20957537acef1fe6bf5971e0e24547b1
+  sha1: sha256:a8da12fc45de7cf5dd8a4f90c54f17db550a2466e61007770f7077cc91c2b6de
+  dependencies: []
+license:
+  version: 9305012e42ec6c1ddfec11a00040ed87b687b2313a82fa424886bf4eaf3f5106
+  fingerprint: 9305012e42ec6c1ddfec11a00040ed87b687b2313a82fa424886bf4eaf3f5106
+  sha1: sha256:3b27e756db873c43b3a34d8ab448d0fe7fe025408ec295898f8773d693d40fd8

@@ -14,7 +14,7 @@ _Example runtime configuration YAML to run on a variety of Ubuntu Linux stemcell
 ```yml
 releases:
 - name: elastic-agent-release
-  version: 0.0.21-alpha
+  version: 0.0.22-alpha
 
 addons:
 - name: elastic-agent-release
@@ -62,7 +62,7 @@ addons:
 
 * Add the updated agent to the BOSH blob store
   ```console
-  bosh add-blob ~/Downloads/elastic-agent-8.10.2-linux-x86_64.tar.gz elastic-agent-8.10.2-linux-x86_64.tar.gz
+  bosh add-blob ~/Downloads/elastic-agent-8.10.4-linux-x86_64.tar.gz elastic-agent-8.10.4-linux-x86_64.tar.gz
   ```
 
 * Optionally upload the blobs to S3 (not required for offline or local development)
@@ -79,8 +79,9 @@ bosh upload-blobs
   ```bash
   bosh create-release \
     --name elastic-agent-release \
-    --version 0.0.21-alpha \
+    --version 0.0.22-alpha \ 
     --tarball /tmp/release.tgz \
     --[force | final]
   ```
+  
 * **NOTE**: When crafting your `runtime.yml`, be sure to reference the updated release version (_and_ make sure that you've uploaded the new release to BOSH)
