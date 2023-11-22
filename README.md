@@ -8,13 +8,13 @@ Fork this repo or download one of the [prebuilt releases](https://github.com/con
 
 **NOTE**: This is intended to be used as a BOSH [addon](https://bosh.io/docs/runtime-config/#update)
 
-## ⚙️ Create a BOSH runtime configuration
+## ⚙️ Create a BOSH [runtime configuration](manifests/runtime.yml)
 _Example runtime configuration YAML to run on a variety of Ubuntu Linux stemcells_
 
 ```yml
 releases:
 - name: elastic-agent-release
-  version: 0.0.22-alpha
+  version: 0.0.23-alpha
 
 addons:
 - name: elastic-agent-release
@@ -25,10 +25,11 @@ addons:
       fleet:
         enrollment-token: Zm9vOmJhego=
         url: https://foobaz.fleet.us-east4.gcp.elastic-cloud.com
+      tags:
+      - sandbox
+      - cloudfoundry
   include:
     stemcell:
-    - os: ubuntu-trusty
-    - os: ubuntu-bionic
     - os: ubuntu-xenial
     - os: ubuntu-jammy
 ```
@@ -46,7 +47,7 @@ addons:
   ```console
   ➜  bosh blobs
   Path                                      Size     Blobstore ID                          Digest
-  elastic-agent-8.10.2-linux-x86_64.tar.gz  535 MiB  665008fd-0590-4036-4cc2-81d445882c14  sha256:67f50acbff3a3e03dc0354d443fdb154c4d3f722826218a4d7d7250b8735361c
+  elastic-agent-8.10.4-linux-x86_64.tar.gz  535 MiB  8c37c4fb-fe2c-4b08-7f63-3846b10a175f  sha256:c789cc3b68453c5c45992ec86b9c2624acd13346a726e20a34064dcd223e470b
 
   1 blobs
 
@@ -58,7 +59,7 @@ addons:
   bosh remove-blob elastic-agent-8.10.2-linux-x86_64.tar.gz
   ```
 
-* Gather the _latest_ Elastic Agent via one of the following methods 
+* Gather the _latest_ Elastic Agent via one of the following methods
   * Manually download from https://www.elastic.co/downloads/elastic-agent
   * Using `wget` && `jq`
     > ```wget https://artifacts.elastic.co/downloads/beats/elastic-agent/elastic-agent-$(wget -qO - https://api.github.com/repos/elastic/elastic-agent/tags\?per_page\=1 | jq -r '.[].name | capture("(?<v>[[:digit:].]+)").v')-linux-x86_64.tar.gz```
@@ -84,9 +85,9 @@ bosh upload-blobs
   ```bash
   bosh create-release \
     --name elastic-agent-release \
-    --version 0.0.22-alpha \ 
+    --version 0.0.23-alpha \
     --tarball /tmp/release.tgz \
     --[force | final]
   ```
-  
+
 * **NOTE**: When crafting your `runtime.yml`, be sure to reference the updated release version (_and_ make sure that you've uploaded the new release to BOSH)
