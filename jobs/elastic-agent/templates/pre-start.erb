@@ -38,6 +38,9 @@ function enroll() {
     --enrollment-token "${enrollment_token}" \
     --certificate-authorities "${certificate_authorities}" \
     --path.config "${CONFIG_DIR}" \
+<% if_p("tags") do |tags| -%>
+    --tag <%= tags.join(',') %> \
+<% end -%>
     --force
 }
 

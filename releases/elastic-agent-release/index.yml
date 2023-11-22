@@ -37,6 +37,8 @@ builds:
     version: 0.0.10-alpha
   95d392ba-21c3-4fb0-60e7-2682149e5451:
     version: 0.0.12-alpha
+  a06a6ea0-a122-4697-4c5b-6174a68dd5c8:
+    version: 0.0.23-alpha
   d1269a6c-c1c6-484b-4b72-21ef51dfded8:
     version: 0.0.14-alpha
   e546e08f-1766-45c4-59f9-b916edee888b:

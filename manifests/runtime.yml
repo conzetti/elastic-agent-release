@@ -1,0 +1,21 @@
+---
+releases:
+- name: elastic-agent-release
+  version: 0.0.23-alpha
+
+addons:
+- name: elastic-agent-release
+  jobs:
+  - name: elastic-agent
+    release: elastic-agent-release
+    properties:
+      fleet:
+        enrollment-token: bUFacmtZc0JpU0hGNXk2cXZxUG86Ymg2OVFzTXhUN3VCbXBmSVZWMUx2dw==
+        url: https://9fbd28e908184eb3b2292a0de33a698a.fleet.us-east4.gcp.elastic-cloud.com
+      tags:
+      - sandbox
+      - cloudfoundry
+  include:
+    stemcell:
+    - os: ubuntu-xenial
+    - os: ubuntu-jammy

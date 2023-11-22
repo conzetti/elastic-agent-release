@@ -23,3 +23,7 @@ properties:
   fleet.certificate-authorities:
     description: Comma separated list of root certificate paths for server verifications
     default: /etc/ssl/certs/ca-certificates.crt
+  tags:
+    description: YAML list of tags to apply to this agent
+    default:
+    - bosh-managed
