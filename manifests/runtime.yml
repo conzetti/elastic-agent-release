@@ -1,21 +1,25 @@
 ---
 releases:
-- name: elastic-agent-release
-  version: 0.0.23-alpha
+- name: elastic-agent
+  version: 1.0.0
 
 addons:
-- name: elastic-agent-release
+- name: elastic-agent
   jobs:
   - name: elastic-agent
-    release: elastic-agent-release
+    release: elastic-agent
     properties:
       fleet:
-        enrollment-token: bUFacmtZc0JpU0hGNXk2cXZxUG86Ymg2OVFzTXhUN3VCbXBmSVZWMUx2dw==
+        enrollment_token: bUFacmtZc0JpU0hGNXk2cXZxUG86Ymg2OVFzTXhUN3VCbXBmSVZWMUx2dw==
         url: https://9fbd28e908184eb3b2292a0de33a698a.fleet.us-east4.gcp.elastic-cloud.com
       tags:
       - sandbox
       - cloudfoundry
-  include:
-    stemcell:
-    - os: ubuntu-xenial
-    - os: ubuntu-jammy
+    exclude:
+      deployments:
+      - bosh-health
+    include:
+      lifecycle: service
+      stemcell:
+      - os: ubuntu-xenial
+      - os: ubuntu-jammy

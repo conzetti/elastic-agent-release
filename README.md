@@ -13,25 +13,29 @@ _Example runtime configuration YAML to run on a variety of Ubuntu Linux stemcell
 
 ```yml
 releases:
-- name: elastic-agent-release
-  version: 0.0.23-alpha
+- name: elastic-agent
+  version: 1.0.0
 
 addons:
-- name: elastic-agent-release
+- name: elastic-agent
   jobs:
   - name: elastic-agent
-    release: elastic-agent-release
+    release: elastic-agent
     properties:
       fleet:
-        enrollment-token: Zm9vOmJhego=
+        enrollment_token: Zm9vOmJhego=
         url: https://foobaz.fleet.us-east4.gcp.elastic-cloud.com
       tags:
       - sandbox
       - cloudfoundry
-  include:
-    stemcell:
-    - os: ubuntu-xenial
-    - os: ubuntu-jammy
+    exclude:
+      deployments:
+      - bosh-health
+    include:
+      lifecycle: service
+      stemcell:
+      - os: ubuntu-xenial
+      - os: ubuntu-jammy
 ```
 
 📣 See the [Platform Automation Documentation](https://docs.pivotal.io/platform-automation/v5.0/tasks.html#update-runtime-config) for help including this with Ops Manager deployed BOSH
@@ -85,7 +89,7 @@ bosh upload-blobs
   ```bash
   bosh create-release \
     --name elastic-agent-release \
-    --version 0.0.23-alpha \
+    --version 1.0.0 \
     --tarball /tmp/release.tgz \
     --[force | final]
   ```

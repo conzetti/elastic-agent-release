@@ -16,11 +16,11 @@ properties:
   agent.grpc.address:
     description: gRPC address to listen on
     default: "127.0.0.1"
-  fleet.enrollment-token:
+  fleet.enrollment_token:
     description: Enrollment token used to enroll Agent into Fleet
   fleet.url:
     description: URL to enroll Agent into Fleet
-  fleet.certificate-authorities:
+  fleet.certificate_authorities:
     description: Comma separated list of root certificate paths for server verifications
     default: /etc/ssl/certs/ca-certificates.crt
   tags:
