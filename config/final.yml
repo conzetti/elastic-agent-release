@@ -1,5 +1,5 @@
 ---
-name: elastic-agent-release
+name: elastic-agent
 blobstore:
   provider: s3
   options:

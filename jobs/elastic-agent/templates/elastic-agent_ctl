@@ -58,6 +58,7 @@ function start() {
     --path.config "${CONFIG_DIR}" \
     --path.home "${JOB_DIR}" \
     --path.downloads "${DOWNLOADS_DIR}" \
+    --path.logs "${LOG_DIR}" \
     1>> "${LOG_DIR}/${PROCESS_NAME}.stdout.log" \
     2>> "${LOG_DIR}/${PROCESS_NAME}.stderr.log" &
     popd

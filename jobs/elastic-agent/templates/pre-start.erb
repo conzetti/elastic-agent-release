@@ -7,6 +7,8 @@ LOG_DIR="/var/vcap/sys/log/${PROCESS_NAME}"
 SCRIPT_NAME=pre-start
 JOB_DIR="/var/vcap/jobs/${PROCESS_NAME}"
 CONFIG_DIR="${JOB_DIR}/config"
+[[ -s /var/vcap/instance/deployment ]] && DEPLOYMENT_NAME="bosh-deployment: $(cat /var/vcap/instance/deployment)"
+[[ -s /var/vcap/instance/name ]] && INSTANCE_NAME="bosh-instance: $(cat /var/vcap/instance/name)"
 
 function start_logging() {
     exec > >(prepend_datetime >> "${LOG_DIR}/${SCRIPT_NAME}.stdout.log")
@@ -24,8 +26,8 @@ function copy_agent_config() {
 
 function enroll() {
     local url=<%= p("fleet.url") %>
-    local enrollment_token=<%= p("fleet.enrollment-token") %>
-    local certificate_authorities=<%= p("fleet.certificate-authorities") %>
+    local enrollment_token=<%= p("fleet.enrollment_token") %>
+    local certificate_authorities=<%= p("fleet.certificate_authorities") %>
 
     if [[ -f "${CONFIG_DIR}/fleet.enc" ]]; then
         echo "INFO: Elastic Agent already enrolled. Skipping enrollment."
@@ -39,8 +41,9 @@ function enroll() {
     --certificate-authorities "${certificate_authorities}" \
     --path.config "${CONFIG_DIR}" \
 <% if_p("tags") do |tags| -%>
-    --tag <%= tags.join(',') %> \
+    --tag "${DEPLOYMENT_NAME:-'bosh-deployment: undefined'},${INSTANCE_NAME:-'bosh-instance: undefined'},<%= tags.join(',') %>" \
 <% end -%>
+    --delay-enroll \
     --force
 }
 
