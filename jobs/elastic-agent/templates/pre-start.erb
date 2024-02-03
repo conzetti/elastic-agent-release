@@ -1,56 +1,47 @@
 #!/bin/bash -eux
 
+
 # Globals
 PROCESS_NAME=elastic-agent
 PKG_DIR="/var/vcap/packages/${PROCESS_NAME}"
 LOG_DIR="/var/vcap/sys/log/${PROCESS_NAME}"
 SCRIPT_NAME=pre-start
-JOB_DIR="/var/vcap/jobs/${PROCESS_NAME}"
-CONFIG_DIR="${JOB_DIR}/config"
-[[ -s /var/vcap/instance/deployment ]] && DEPLOYMENT_NAME="bosh-deployment: $(cat /var/vcap/instance/deployment)"
-[[ -s /var/vcap/instance/name ]] && INSTANCE_NAME="bosh-instance: $(cat /var/vcap/instance/name)"
+AGENT_PROGRAM_DIR=/opt/Elastic/Agent
+BOSH_CONFIG_DIR="/var/vcap/jobs/${PROCESS_NAME}/config"
+[[ -s /var/vcap/instance/deployment ]] && DEPLOYMENT_NAME="bosh-deployment=$(</var/vcap/instance/deployment)"
+[[ -s /var/vcap/instance/name ]] && INSTANCE_NAME="bosh-instance=$(</var/vcap/instance/name)"
 
-function start_logging() {
-    exec > >(prepend_datetime >> "${LOG_DIR}/${SCRIPT_NAME}.stdout.log")
-    exec 2> >(prepend_datetime >> "${LOG_DIR}/${SCRIPT_NAME}.stderr.log")
-}
 
-function prepend_datetime() {
-    perl -ne 'BEGIN { use Time::HiRes "time"; use POSIX "strftime"; STDOUT->autoflush(1) }; my $t = time; my $fsec = sprintf ".%09d", ($t-int($t))*1000000000; my $time = strftime("[%Y-%m-%dT%H:%M:%S".$fsec."Z]", localtime $t); print("$time $_")'
-}
+source "/var/vcap/jobs/${PROCESS_NAME}/bin/functions/common.sh"
 
-function copy_agent_config() {
-    cp -v "${CONFIG_DIR}/elastic-agent.yml.bosh_managed" "${CONFIG_DIR}/elastic-agent.yml"
-    chown -v vcap:vcap "${CONFIG_DIR}/elastic-agent.yml"
-}
-
-function enroll() {
+function install() {
     local url=<%= p("fleet.url") %>
     local enrollment_token=<%= p("fleet.enrollment_token") %>
     local certificate_authorities=<%= p("fleet.certificate_authorities") %>
 
-    if [[ -f "${CONFIG_DIR}/fleet.enc" ]]; then
+    if [[ -f "${AGENT_PROGRAM_DIR}/fleet.enc" ]]; then
         echo "INFO: Elastic Agent already enrolled. Skipping enrollment."
         return 0
     fi
 
-    pushd "${JOB_DIR}"
-    "${PKG_DIR}/bin/${PROCESS_NAME}" enroll \
+    "${PKG_DIR}/bin/${PROCESS_NAME}" install \
     --url "${url}" \
     --enrollment-token "${enrollment_token}" \
     --certificate-authorities "${certificate_authorities}" \
-    --path.config "${CONFIG_DIR}" \
+    --path.logs "${LOG_DIR}" \
 <% if_p("tags") do |tags| -%>
-    --tag "${DEPLOYMENT_NAME:-'bosh-deployment: undefined'},${INSTANCE_NAME:-'bosh-instance: undefined'},<%= tags.join(',') %>" \
+    --tag "${DEPLOYMENT_NAME:-'bosh-deployment=undefined'},${INSTANCE_NAME:-'bosh-instance=undefined'},<%= tags.join(',') %>" \
 <% end -%>
     --delay-enroll \
+    --non-interactive \
     --force
 }
 
 function main() {
-    start_logging
-    copy_agent_config
-    enroll
+    start_logging "${LOG_DIR}" "${SCRIPT_NAME}"
+    install
+    overwrite_agent_config "${BOSH_CONFIG_DIR}" "${AGENT_PROGRAM_DIR}"
 }
+
 
 main

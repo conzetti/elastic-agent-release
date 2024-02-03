@@ -1,95 +1,51 @@
 #!/bin/bash -eux
-
 set -o pipefail
+
 
 # Globals
 PROCESS_NAME=elastic-agent
-RUN_DIR="/var/vcap/sys/run/${PROCESS_NAME}"
-PIDFILE="${RUN_DIR}/${PROCESS_NAME}.pid"
 LOG_DIR="/var/vcap/sys/log/${PROCESS_NAME}"
 SCRIPT_NAME="${PROCESS_NAME}_ctl"
-JOB_DIR="/var/vcap/jobs/${PROCESS_NAME}"
 PKG_DIR="/var/vcap/packages/${PROCESS_NAME}"
-DOWNLOADS_DIR="${PKG_DIR}/downloads"
-CONFIG_DIR="${JOB_DIR}/config"
-DATA_DIR="${JOB_DIR}/data"
+AGENT_PROGRAM_DIR=/opt/Elastic/Agent
+BOSH_CONFIG_DIR="/var/vcap/jobs/${PROCESS_NAME}/config"
 
-function start_logging() {
-    exec > >(prepend_datetime >> "${LOG_DIR}/${SCRIPT_NAME}.stdout.log")
-    exec 2> >(prepend_datetime >> "${LOG_DIR}/${SCRIPT_NAME}.stderr.log")
-}
 
-function prepend_datetime() {
-    perl -ne 'BEGIN { use Time::HiRes "time"; use POSIX "strftime"; STDOUT->autoflush(1) }; my $t = time; my $fsec = sprintf ".%09d", ($t-int($t))*1000000000; my $time = strftime("[%Y-%m-%dT%H:%M:%S".$fsec."Z]", localtime $t); print("$time $_")'
-}
+source "/var/vcap/jobs/${PROCESS_NAME}/bin/functions/common.sh"
 
-function pid_exists() {
-    ps -p $1 &> /dev/null
-}
+function add_systemd_override() {
+    local override_directory="/etc/systemd/system/${PROCESS_NAME}.service.d"
 
-function create_directories_and_chown_to_vcap() {
-    mkdir -pv "${LOG_DIR}" "${RUN_DIR}" "${DOWNLOADS_DIR}" "${DATA_DIR}"
-    chown -Rv vcap:vcap "${LOG_DIR}"
-    chown -Rv vcap:vcap "${RUN_DIR}"
-    chown -Rv vcap:vcap "${DOWNLOADS_DIR}"
-    chown -Rv vcap:vcap "${DATA_DIR}"
-}
-
-function copy_agent_config() {
-    cp -v "${CONFIG_DIR}/elastic-agent.yml.bosh_managed" "${CONFIG_DIR}/elastic-agent.yml"
-    chown -v vcap:vcap "${CONFIG_DIR}/elastic-agent.yml"
+    mkdir -pv "${override_directory}"
+    cp -v "${BOSH_CONFIG_DIR}/override.conf" "${override_directory}"
+    systemctl daemon-reload
 }
 
 function start() {
-    if [[ -e "${PIDFILE}" ]]; then
-        pid=$(head -1 "${PIDFILE}")
-        if pid_exists "${pid}"; then
-            return 0
-        fi
-    fi
+    systemctl is-active elastic-agent && exit 0
 
-    copy_agent_config
+    overwrite_agent_config "${BOSH_CONFIG_DIR}" "${AGENT_PROGRAM_DIR}"
     process_path=$(readlink -f "${PKG_DIR}/bin/${PROCESS_NAME}")
     setcap cap_net_bind_service=+ep "${process_path}"
-    ulimit -n 65536
 
-    pushd "${JOB_DIR}"
-    "${PKG_DIR}/bin/${PROCESS_NAME}" run\
-    --path.config "${CONFIG_DIR}" \
-    --path.home "${JOB_DIR}" \
-    --path.downloads "${DOWNLOADS_DIR}" \
-    --path.logs "${LOG_DIR}" \
+    add_systemd_override
+    systemctl is-enabled "${PROCESS_NAME}" --quiet || systemctl enable "${PROCESS_NAME}" \
     1>> "${LOG_DIR}/${PROCESS_NAME}.stdout.log" \
     2>> "${LOG_DIR}/${PROCESS_NAME}.stderr.log" &
-    popd
 
-    echo $! > "${PIDFILE}"
+    systemctl start "${PROCESS_NAME}" \
+    1>> "${LOG_DIR}/${PROCESS_NAME}.stdout.log" \
+    2>> "${LOG_DIR}/${PROCESS_NAME}.stderr.log" &
 }
 
 function stop() {
-    local pid
-
-    if [[ -e "${PIDFILE}" ]]; then
-        pid=$(head -1 "${PIDFILE}")
-    else
-        exit 0
-    fi
-
-    if [[ ! -z "${pid}" ]] && pid_exists "${pid}"; then
-        kill -15 "${pid}" || true
-    fi
-
-    if [[ -e "/proc/${pid}" ]]; then
-        kill -9 "${pid}" || true
-    fi
-
-    rm -fv "${PIDFILE}"
+    systemctl stop "${PROCESS_NAME}"
 }
 
 function main() {
     local operation="${1:-null}"
-    create_directories_and_chown_to_vcap
-    start_logging
+    mkdir -pv "${LOG_DIR}"
+    start_logging "${LOG_DIR}" "${SCRIPT_NAME}"
     case ${operation} in
         start)
             start
@@ -102,5 +58,6 @@ function main() {
         ;;
     esac
 }
+
 
 main $@
