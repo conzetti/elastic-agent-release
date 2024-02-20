@@ -1,21 +1,21 @@
 name: elastic-agent
-version: 1.0.0
-commit_hash: 8dc8ec9
+version: 2.0.0
+commit_hash: be6b7ad
 uncommitted_changes: true
 jobs:
 - name: elastic-agent
-  version: 26e8917259a418dc9375e932c2280e0afe90b5633a8ed6b7a5a487ea1c8ec481
-  fingerprint: 26e8917259a418dc9375e932c2280e0afe90b5633a8ed6b7a5a487ea1c8ec481
-  sha1: sha256:e730d8f54a7c4c0e58ecc2b9d2b3ecc53485be390612f94cd5464a213c3c833d
+  version: 200c9463e3b08293c276aebb09254f19bf9e2e6a1d8f295fdebc7ce27caba0ea
+  fingerprint: 200c9463e3b08293c276aebb09254f19bf9e2e6a1d8f295fdebc7ce27caba0ea
+  sha1: sha256:15110d879f48d52b0759c1282955c4d3b5f075dcc5bd06ac3cc92aa3cf14aa56
   packages:
   - elastic-agent
 packages:
 - name: elastic-agent
   version: 82d5af1cd664ae63ef959ef039c5e241a6397e3c7a204411596eeff00c9fd069
   fingerprint: 82d5af1cd664ae63ef959ef039c5e241a6397e3c7a204411596eeff00c9fd069
-  sha1: sha256:e8c19ef929ecaf967a40241394a1953d6f5e98e1aa07242b6fbf97ada7bbb461
+  sha1: sha256:e15c0811150dfca71bef1a7586003127f21ec69c110f2e560d5a73727f271252
   dependencies: []
 license:
   version: 9305012e42ec6c1ddfec11a00040ed87b687b2313a82fa424886bf4eaf3f5106
   fingerprint: 9305012e42ec6c1ddfec11a00040ed87b687b2313a82fa424886bf4eaf3f5106
-  sha1: sha256:344fb2b10aff85c24c7edc7d5111a5340d641b09be78fcb9d85ccaed95b3aa91
+  sha1: sha256:2f9b46bc85fcca245fb153bd779fde45355dfaab1efb8e23fdf60c6b8bad39e9

@@ -14,7 +14,7 @@ _Example runtime configuration YAML to run on a variety of Ubuntu Linux stemcell
 ```yml
 releases:
 - name: elastic-agent
-  version: 1.0.0
+  version: 2.0.0
 
 addons:
 - name: elastic-agent
@@ -89,7 +89,7 @@ bosh upload-blobs
   ```bash
   bosh create-release \
     --name elastic-agent-release \
-    --version 1.0.0 \
+    --version 2.0.0 \
     --tarball /tmp/release.tgz \
     --[force | final]
   ```

@@ -3,13 +3,18 @@ name: elastic-agent
 
 templates:
   elastic-agent_ctl: bin/elastic-agent_ctl
+  elastic-agent.service.d/override.conf.erb: config/override.conf
+  elastic-agent.yml.erb: config/elastic-agent.yml
+  functions/common.sh: bin/functions/common.sh
   pre-start.erb: bin/pre-start
-  elastic-agent.yml.erb: config/elastic-agent.yml.bosh_managed
 
 packages:
 - elastic-agent
 
 properties:
+  agent.path_logs:
+    description: The directory containing log output for Elastic Agent.
+    default: /var/vcap/sys/log/elastic-agent
   agent.monitoring.http.host:
     description: Monitoring address to listen on
     default: "127.0.0.1"
